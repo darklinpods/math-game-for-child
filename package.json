@@ -4,7 +4,7 @@
   "description": "A math game for children to learn basic arithmetic with numbers less than 20.",
   "main": "src/index.tsx",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "BROWSER=google-chrome react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
