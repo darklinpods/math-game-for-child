@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { generateProblem } from '../utils/mathUtils';
+import correctSound from '../assets/sounds/correct.mp3';
+import incorrectSound from '../assets/sounds/incorrect.mp3';
 
 interface GameProps {
   level: number;
@@ -7,22 +9,12 @@ interface GameProps {
   onGameEnd: () => void;
 }
 
-/**
- * Game component represents the main game logic and UI for a math game.
- * It manages the game state including the current problem, score, time left, and possible answers.
- * The component receives level, onScoreUpdate, and onGameEnd as props to control the game flow.
- *
- * @param {GameProps} props - The properties passed to the component.
- * @param {number} props.level - The difficulty level of the game.
- * @param {function} props.onScoreUpdate - Callback function to update the score.
- * @param {function} props.onGameEnd - Callback function to handle game end.
- * @returns {JSX.Element} The rendered game UI.
- */
 const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd }) => {
   const [problem, setProblem] = useState(generateProblem(level));
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [answers, setAnswers] = useState<number[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -65,14 +57,26 @@ const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd }) => {
     return array;
   };
 
-  const handleAnswerClick = (selectedAnswer: number) => {
-    if (selectedAnswer === problem.answer) {
+  const handleAnswerClick = (answer: number) => {
+    const correctAudio = new Audio(correctSound);
+    const incorrectAudio = new Audio(incorrectSound);
+
+    setSelectedAnswer(answer);
+
+    if (answer === problem.answer) {
+      correctAudio.play();
       const newScore = score + 1;
       setScore(newScore);
       onScoreUpdate(newScore);
-      setProblem(generateProblem(level));
+      setTimeout(() => {
+        setProblem(generateProblem(level));
+        setSelectedAnswer(null);
+      }, 500);
     } else {
-      onGameEnd();
+      incorrectAudio.play();
+      setTimeout(() => {
+        onGameEnd();
+      }, 500);
     }
   };
 
@@ -82,7 +86,17 @@ const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd }) => {
       <p>剩余时间: {timeLeft}秒</p>
       <div className="answers">
         {answers.map((answer, index) => (
-          <button key={index} onClick={() => handleAnswerClick(answer)}>
+          <button
+            key={index}
+            onClick={() => handleAnswerClick(answer)}
+            className={
+              selectedAnswer === answer
+                ? answer === problem.answer
+                  ? 'correct'
+                  : 'incorrect'
+                : ''
+            }
+          >
             {answer}
           </button>
         ))}
