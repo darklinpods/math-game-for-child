@@ -1,5 +1,8 @@
 # Math Game
 
+![Math Game Screenshot](assets/image.png)
+
+
 ## Overview/简介
 This project is a fun and interactive math game designed for children to learn basic arithmetic with numbers less than 20. The game features a graphical user interface that makes learning engaging and enjoyable.
 
