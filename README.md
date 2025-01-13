@@ -1,6 +1,6 @@
 # Math Game
 
-![Math Game Screenshot](assets/image.png)
+![Math Game Screenshot](./image.png)
 
 
 ## Overview/简介
