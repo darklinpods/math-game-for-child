@@ -5,23 +5,25 @@ import incorrectSound from '../assets/sounds/incorrect.mp3';
 
 interface GameProps {
   level: number;
-  onScoreUpdate: (newScore: number) => void;
+  onScoreUpdate: (newScore: number, question: string, correct: boolean) => void;
   onGameEnd: () => void;
+  totalQuestions: number;
 }
 
-const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd }) => {
+const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd, totalQuestions }) => {
   const [problem, setProblem] = useState(generateProblem(level));
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [answers, setAnswers] = useState<number[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [questionCount, setQuestionCount] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timer);
-          onGameEnd();
+          handleNextQuestion();
           return 0;
         }
         return prevTime - 1;
@@ -29,7 +31,7 @@ const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [onGameEnd]);
+  }, [questionCount]);
 
   useEffect(() => {
     generateAnswers();
@@ -67,16 +69,22 @@ const Game: React.FC<GameProps> = ({ level, onScoreUpdate, onGameEnd }) => {
       correctAudio.play();
       const newScore = score + 1;
       setScore(newScore);
-      onScoreUpdate(newScore);
-      setTimeout(() => {
-        setProblem(generateProblem(level));
-        setSelectedAnswer(null);
-      }, 500);
+      onScoreUpdate(newScore, problem.question, true);
     } else {
       incorrectAudio.play();
-      setTimeout(() => {
-        onGameEnd();
-      }, 500);
+      onScoreUpdate(score, problem.question, false);
+    }
+    handleNextQuestion();
+  };
+
+  const handleNextQuestion = () => {
+    if (questionCount < 9) {
+      setQuestionCount(questionCount + 1);
+      setProblem(generateProblem(level));
+      setSelectedAnswer(null);
+      setTimeLeft(30);
+    } else {
+      onGameEnd();
     }
   };
 

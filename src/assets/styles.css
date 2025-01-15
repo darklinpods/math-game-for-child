@@ -1,60 +1,3 @@
-body {
-  font-family: "Arial", sans-serif;
-  background-color: #f0f8ff;
-  color: #333;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  color: #4a90e2;
-}
-
-.game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.question {
-  font-size: 24px;
-  margin: 20px 0;
-}
-
-.input-answer {
-  padding: 10px;
-  font-size: 18px;
-  width: 100px;
-  text-align: center;
-}
-
-.submit-button {
-  padding: 10px 20px;
-  font-size: 18px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.submit-button:hover {
-  background-color: #45a049;
-}
-
-.score {
-  font-size: 2em;
-  margin-top: 20px;
-}
-
-.message {
-  font-size: 18px;
-  color: #e74c3c;
-  margin-top: 10px;
-}
-
 .app-container {
   text-align: center;
   font-family: Arial, sans-serif;
@@ -81,7 +24,7 @@ h1 {
   font-size: 1.5em;
   border: none;
   border-radius: 10px;
-  background-color: #4caf50;
+  background-color: #4CAF50;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -91,20 +34,48 @@ h1 {
   background-color: #45a049;
 }
 
+.answers button.correct {
+  animation: correctAnswer 0.5s ease-in-out;
+}
+
+.answers button.incorrect {
+  animation: incorrectAnswer 0.5s ease-in-out;
+}
+
+@keyframes correctAnswer {
+  0% { background-color: #4CAF50; }
+  50% { background-color: #8BC34A; }
+  100% { background-color: #4CAF50; }
+}
+
+@keyframes incorrectAnswer {
+  0% { background-color: #F44336; }
+  50% { background-color: #E57373; }
+  100% { background-color: #F44336; }
+}
+
+.score {
+  margin-top: 20px;
+  font-size: 2em;
+}
+
 button {
   font-size: 1.5em;
   padding: 10px 20px;
   border: none;
   border-radius: 10px;
-  background-color: #008cba;
+  background-color: #008CBA;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 1.5em;
 }
 
 button:hover {
   background-color: #007bb5;
+}
+
+button.restart {
+  margin-top: 40px; /* Increase the top margin for the restart button */
 }
 
 label {
@@ -115,4 +86,32 @@ select {
   font-size: 1.5em;
   padding: 5px;
   margin-left: 10px;
+}
+
+.stars {
+  margin-top: 20px;
+}
+
+.star {
+  font-size: 2em;
+  color: gold;
+}
+
+.answer-records {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.answer-records li {
+  font-size: 1.2em;
+  margin: 5px 0;
+}
+
+.answer-records li.correct {
+  color: green;
+}
+
+.answer-records li.incorrect {
+  color: red;
 }
